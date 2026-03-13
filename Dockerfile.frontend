@@ -1,0 +1,29 @@
+# Use the official Node.js image as the base image
+FROM node:18-alpine AS frontend
+
+# Set the working directory
+WORKDIR /react
+
+RUN npm config set registry https://registry.npmmirror.com/ --global
+
+# Copy the application files to the working directory
+COPY . .
+
+# Clean the npm cache
+RUN npm cache clean --force
+
+# Install dependencies (force flag used to handle any version mismatches)
+RUN npm install -f
+
+# Install serve and http-server globally
+RUN npm install -g serve
+RUN npm install -g http-server
+
+# Build the application using Create React App build script
+RUN npm run build
+
+# Expose the application port
+EXPOSE 3000
+
+# Serve the CRA build output (build/) on port 3000
+CMD ["serve", "-s", "build", "-l", "3000"]
