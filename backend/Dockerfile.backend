@@ -1,58 +1,30 @@
 FROM python:3.11.5
 ENV PYTHONUNBUFFERED 1
 
-# Create virtual environment
 RUN python -m venv /fastapi/backend_env
 ENV PATH="/fastapi/backend_env/bin:$PATH"
 
-# ── System dependencies ───────────────────────────────────────────
 RUN apt-get update && apt-get install -y \
-    libgl1-mesa-glx \
-    pkg-config \
-    libsentencepiece-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-# FFmpeg
-RUN apt-get -y update && apt-get -y upgrade && apt-get install -y --no-install-recommends ffmpeg
-
-# Java (OpenJDK 17)
-RUN apt-get update && apt-get install -y openjdk-17-jdk && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Supervisor
-RUN apt-get update && apt-get install -y python3-dev supervisor
+    python3-dev \
+    supervisor \
+    ffmpeg \
+    openjdk-17-jdk \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /fastapi
 
-# ── Python dependencies ───────────────────────────────────────────
 COPY requirements.txt requirements.txt
 
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
-RUN pip install \
-    "unstructured[pdf]" \
-    langchain-community \
-    langchain \
-    langchain-core~=0.3.15 \
-    llama_index~=0.11.22 \
-    langchain_groq~=0.2.1 \
-    langchain-ollama \
-    chromadb==0.5.3
 
-# ── Supervisor config ─────────────────────────────────────────────
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN chmod 1777 /var/log/supervisor/
 
-# ── secure_keys volume mount point ───────────────────────────────
-# Files in this folder are NOT baked into the image.
-# Mount your host folder at runtime:
-#   docker run -v /host/path/secure_keys:/fastapi/secure_keys ...
 RUN mkdir -p /fastapi/secure_keys
 
 EXPOSE 8000
 
-# Copy application code last (keeps pip cache intact on code changes)
 COPY . .
 
-# Run Alembic migrations then hand off to Supervisor
 CMD ["sh", "-c", "alembic upgrade head && supervisord --nodaemon --configuration /etc/supervisor/conf.d/supervisord.conf"]
