@@ -211,22 +211,67 @@
     text-align: center;
 }
 
-.nav-label {
-    white-space: nowrap;
+.nav-arrow {
+    margin-left: auto;
+    font-size: 14px;
+    color: var(--text-secondary);
+    transition: transform 0.18s ease;
 }
 
-/* Spacer */
-.sidebar-spacer {
-    flex: 1;
+.sidebar-nav button.active .nav-arrow {
+    color: var(--accent);
 }
 
-/* ── Sidebar Divider ── */
-.sidebar-divider {
-    height: 1px;
+.server-header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    width: 100%;
+}
+
+.account-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px 4px 8px 8px;
+    border-left: 2px solid rgba(255, 255, 255, 0.08);
+    margin-top: 4px;
+}
+
+.sidebar-subnav {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    padding: 8px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: left;
+    font-size: 13px;
+    transition: background 0.18s ease, color 0.18s ease;
+}
+
+.sidebar-subnav:hover,
+.sidebar-subnav.active {
+    background: rgba(255, 255, 255, 0.07);
+    color: var(--text-primary);
+}
+
+.empty-note,
+.info-box {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    color: var(--text-secondary);
+    padding: 18px;
+    margin-top: 12px;
+}
+
+/* height: 1px;
     background: var(--border);
     margin: 8px 0;
     flex-shrink: 0;
-}
+} */
 
 /* ── Profile Section ── */
 .profile-section {
@@ -365,6 +410,7 @@ table {
     overflow: hidden;
     margin-top: 16px;
     backdrop-filter: blur(8px);
+    table-layout: auto;
 }
 
 thead {
@@ -907,4 +953,52 @@ input[type="file"]::-webkit-file-upload-button {
     .sidebar-collapsed .main {
         padding-left: 52px;
     }
+}
+
+
+/* Specific Badge for Schedule */
+.badge-schedule {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    background: rgba(74, 144, 217, 0.1);
+    color: var(--accent);
+    border-radius: 4px;
+    border: 1px solid rgba(74, 144, 217, 0.2);
+}
+
+/* Schedule box within modal */
+.schedule-box input[type="time"] {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border);
+    color: var(--accent);
+    font-weight: 600;
+    text-align: center;
+}
+
+.schedule-box input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    /* Makes the clock icon white */
+    cursor: pointer;
+}
+
+/* Checkbox specific styling */
+input[type="checkbox"] {
+    cursor: pointer;
+    accent-color: var(--accent);
+    width: 18px;
+    height: 18px;
+}
+
+/* Modal form sections spacing */
+.form-section+.form-section {
+    margin-top: 15px;
+}
+
+/* Button sizing consistency */
+.btn-sm,
+td .btn {
+    padding: 4px 10px;
+    font-size: 11px;
 }

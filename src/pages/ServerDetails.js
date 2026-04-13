@@ -11,7 +11,7 @@ import {
 const API_BASE = (() => {
     if (process.env.NODE_ENV === "development")
         return `http://${window.location.hostname}:8000`;
-    return `${window.location.protocol}//${window.location.host}`;
+    return `${window.location.protocol}//${window.location.host}/api`;
 })();
 
 const getToken = () => localStorage.getItem("token") || "";
